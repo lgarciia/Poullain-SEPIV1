@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poullain SEPI - Ajout de Véhicules</title>
+    <link rel="stylesheet" href="VHL.CSS">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #001f3f; /* Bleu foncé */
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+        }
+
+        nav {
+            background-color: #001f3f; /* Bleu foncé */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        .title {
+            margin: 0;
+            color: #fff;
+            font-size: 1.5em;
+        }
+
+        .back-button {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: color 0.3s, transform 0.3s;
+            margin-left: 0px; /* Décale le bouton vers la gauche */
+        }
+
+        .back-button:hover {
+            color: #99bbcc;
+            transform: translateY(-1px);
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .form-container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            margin: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px; /* Diminution de l'écart entre les éléments */
+        }
+
+        .form-container input, .form-container select, .form-container button, .form-container label {
+            padding: 5px; /* Diminution du padding */
+            margin: 5px 0; /* Diminution du margin */
+            font-size: 0.9em; /* Diminution de la taille de la police */
+        }
+
+        .form-container label {
+            align-self: center;
+        }
+
+        .form-container button {
+            grid-column: span 2;
+            background-color: #001f3f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #003366;
+            transform: translateY(-1px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #001f3f;
+            color: white;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-right: 20px;
+        }
+
+        .button-container button {
+            background-color: #001f3f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #003366;
+            transform: translateY(-1px);
+        }
+
+
+        footer {
+            background-color: #001f3f; /* Bleu foncé */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <h1 class="title">Ajouter un Véhicule</h1>
+            <a href="AJOUTERAFFECTATION.HTML" class="button-container">Ajouter une affectation</a>
+            <a href="VHL.html" class="back-button">Retour</a>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <form id="vehicleForm" class="form-grid">
+            <input type="text" id="vehicleName" placeholder="Nom du véhicule" required>
+            <input type="text" id="vehicleNumber" placeholder="Numéro de parc" required>
+            <input type="number" id="vehicleKilometrage" placeholder="Kilométrage" required>
+            <input type="number" id="insuranceAmount" placeholder="Montant d'assurance" required>
+            <input type="number" id="rentalAmount" placeholder="Montant du loyer" required>
+            <select id="fuelType" required>
+                <option value="" disabled selected>Type de carburant</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Essence">Essence</option>
+                <option value="Éthanol">Éthanol</option>
+                <option value="Electrique">Electrique</option>
+            </select>
+            <label for="geolocation">Géolocalisé :</label>
+            <div>
+                <input type="radio" id="geoYes" name="geolocation" value="Oui" required> Oui
+                <input type="radio" id="geoNo" name="geolocation" value="Non"> Non
+            </div>
+            <label for="passAutoroute">Pass autoroute :</label>
+            <div>
+                <input type="radio" id="passYes" name="passAutoroute" value="Oui" required> Oui
+                <input type="radio" id="passNo" name="passAutoroute" value="Non"> Non
+            </div>
+            <label for="affectation">Affectation :</label>
+            <select id="affectation" required>
+                <option value="" disabled selected>Sélectionner une affectation</option>
+                <!-- Options d'affectation seront ajoutées ici -->
+            </select>
+            <input type="file" id="vehicleDocument" required>
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
+
+    <table id="vehicleTable">
+        <thead>
+            <tr>
+                <th>Nom du véhicule</th>
+                <th>Numéro de parc</th>
+                <th>Kilométrage</th>
+                <th>Montant d'assurance</th>
+                <th>Montant du loyer</th>
+                <th>Type de carburant</th>
+                <th>Géolocalisé</th>
+                <th>Pass autoroute</th>
+                <th>Affectation</th>
+                <th>Document</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les nouvelles lignes seront ajoutées ici -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const vehicleForm = document.getElementById('vehicleForm');
+            const vehicleTableBody = document.getElementById('vehicleTable').getElementsByTagName('tbody')[0];
+            const affectationSelect = document.getElementById('affectation');
+
+            // Charger les lieux d'affectation depuis localStorage
+            const affectations = JSON.parse(localStorage.getItem('affectations')) || [];
+            affectations.forEach(affectation => {
+                const option = document.createElement('option');
+                option.value = affectation.name;
+                option.textContent = affectation.name;
+                affectationSelect.appendChild(option);
+            });
+
+            // Charger les véhicules enregistrés depuis localStorage
+            const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+            savedVehicles.forEach(vehicle => addVehicleToTable(vehicle));
+
+            vehicleForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const vehicleName = document.getElementById('vehicleName').value;
+                const vehicleNumber = document.getElementById('vehicleNumber').value;
+                const vehicleKilometrage = document.getElementById('vehicleKilometrage').value;
+                const insuranceAmount = document.getElementById('insuranceAmount').value;
+                const rentalAmount = document.getElementById('rentalAmount').value;
+                const fuelType = document.getElementById('fuelType').value;
+                const geolocation = document.querySelector('input[name="geolocation"]:checked').value;
+                const passAutoroute = document.querySelector('input[name="passAutoroute"]:checked').value;
+                const affectation = document.getElementById('affectation').value;
+                const vehicleDocumentFile = document.getElementById('vehicleDocument').files[0];
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const vehicleDocument = event.target.result;
+                    
+                    const vehicle = {
+                        name: vehicleName,
+                        number: vehicleNumber,
+                        kilometrage: vehicleKilometrage,
+                        insurance: insuranceAmount,
+                        rental: rentalAmount,
+                        fuel: fuelType,
+                        geo: geolocation,
+                        pass: passAutoroute,
+                        affectation: affectation,
+                        document: vehicleDocument,
+                        documentName: vehicleDocumentFile.name
+                    };
+
+                    // Add the vehicle to the table
+                    addVehicleToTable(vehicle);
+
+                    // Save the vehicle to localStorage
+                    savedVehicles.push(vehicle);
+                    localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
+
+                    // Reset the form
+                    vehicleForm.reset();
+                };
+                reader.readAsDataURL(vehicleDocumentFile);
+            });
+
+            function addVehicleToTable(vehicle) {
+                const newRow = vehicleTableBody.insertRow();
+                
+                const nameCell = newRow.insertCell(0);
+                const numberCell = newRow.insertCell(1);
+                const kilometrageCell = newRow.insertCell(2);
+                const insuranceCell = newRow.insertCell(3);
+                const rentalCell = newRow.insertCell(4);
+                const fuelCell = newRow.insertCell(5);
+                const geoCell = newRow.insertCell(6);
+                const passCell = newRow.insertCell(7);
+                const affectationCell = newRow.insertCell(8);
+                const documentCell = newRow.insertCell(9);
+                const actionCell = newRow.insertCell(10);
+                
+                nameCell.textContent = vehicle.name;
+                numberCell.textContent = vehicle.number;
+                kilometrageCell.textContent = vehicle.kilometrage;
+                insuranceCell.textContent = vehicle.insurance;
+                rentalCell.textContent = vehicle.rental;
+                fuelCell.textContent = vehicle.fuel;
+                geoCell.textContent = vehicle.geo;
+                passCell.textContent = vehicle.pass;
+                affectationCell.textContent = vehicle.affectation;
+                
+                const documentLink = document.createElement('a');
+                documentLink.href = vehicle.document;
+                documentLink.textContent = vehicle.documentName;
+                documentLink.target = "_blank";
+                documentCell.appendChild(documentLink);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Supprimer';
+                deleteButton.onclick = function() {
+                    const rowIndex = newRow.rowIndex - 1;
+                    savedVehicles.splice(rowIndex, 1);
+                    localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
+                    vehicleTableBody.deleteRow(rowIndex);
+                };
+                actionCell.appendChild(deleteButton);
+            }
+        });
+    </script>
+</body>
+
+</html>

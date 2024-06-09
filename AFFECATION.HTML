@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affectation des Véhicules</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #001f3f;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 1em;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #001f3f;
+            color: white;
+        }
+        .selectedPlace { /* Style pour la sélection */
+            background-color: green;
+            color: white;
+        }
+
+        .placeSelect {
+            background-color: orange;
+            width: 100%;
+            height: 30px;
+        }
+
+        .placeSelect option {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Affectation des Véhicules</h1>
+    </header>
+
+    <main>
+        <label for="month">Sélectionner un mois :</label>
+        <select id="month">
+            <option value="1">Janvier</option>
+            <option value="2">Février</option>
+            <option value="3">Mars</option>
+            <option value="4">Avril</option>
+            <option value="5">Mai</option>
+            <option value="6">Juin</option>
+            <option value="7">Juillet</option>
+            <option value="8">Août</option>
+            <option value="9">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+        </select>
+
+        <table id="vehicleTable">
+            <thead>
+                <tr>
+                    <th>Numéro de parc</th>
+                    <th colspan="31">Jours du Mois</th>
+                </tr>
+            </thead>
+            <tbody id="vehicleList">
+                <!-- Les véhicules seront ajoutés ici -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthSelect = document.getElementById('month');
+            const vehicleList = document.getElementById('vehicleList');
+            const assignments = {};
+
+            // Fonction pour générer la liste des véhicules avec les sélecteurs de lieu d'affectation
+            function generateVehicleList(month, year) {
+                const daysInMonth = new Date(year, month, 0).getDate();
+                const vehicleNumbers = JSON.parse(localStorage.getItem('vehicles')) || [];
+                const affectations = JSON.parse(localStorage.getItem('affectations')) || [];
+
+                const vehicleItems = vehicleNumbers.map(vehicle => {
+                    const row = document.createElement('tr');
+                    const vehicleCell = document.createElement('td');
+                    vehicleCell.textContent = vehicle.number;
+                    row.appendChild(vehicleCell);
+
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const dayCell = document.createElement('td');
+                        const placeSelect = document.createElement('select');
+                        placeSelect.classList.add('placeSelect');
+                        placeSelect.dataset.vehicle = vehicle.number;
+                        placeSelect.dataset.day = i;
+                        placeSelect.innerHTML = `
+                            <option value="">-- Sélectionner un lieu --</option>
+                            <!-- Options d'affectation seront ajoutées ici -->
+                        `;
+                        // Ajout des options d'affectation à partir des lieux enregistrés
+                        affectations.forEach(affectation => {
+                            const option = document.createElement('option');
+                            option.value = affectation.name;
+                            option.textContent = affectation.name;
+                            placeSelect.appendChild(option);
+                        });
+
+                        placeSelect.addEventListener('change', function() {
+                            const vehicleNumber = this.dataset.vehicle;
+                            const day = parseInt(this.dataset.day);
+                            const place = this.value;
+
+                            if (!assignments[vehicleNumber]) {
+                                assignments[vehicleNumber] = {};
+                            }
+                            assignments[vehicleNumber][day] = place;
+                            localStorage.setItem('assignments', JSON.stringify(assignments));
+                        });
+                        dayCell.appendChild(placeSelect);
+                        row.appendChild(dayCell);
+                    }
+
+                    return row;
+                });
+
+                return vehicleItems;
+            }
+
+            // Fonction pour charger les affectations depuis le stockage local
+            function loadAssignments() {
+                const savedAssignments = JSON.parse(localStorage.getItem('assignments')) || {};
+                const selects = document.querySelectorAll('select.placeSelect');
+                selects.forEach(select => {
+                    const vehicle = select.dataset.vehicle;
+                    const day = parseInt(select.dataset.day);
+                    const savedVehicleAssignments = savedAssignments[vehicle];
+                    if (savedVehicleAssignments && savedVehicleAssignments[day]) {
+                        select.value = savedVehicleAssignments[day];
+                    }
+                });
+            }
+
+            // Écouter les changements dans la liste déroulante des mois
+            monthSelect.addEventListener('change', function() {
+                const selectedMonth = parseInt(this.value);
+                const selectedYear = new Date().getFullYear(); // Année actuelle
+
+                // Effacer la liste actuelle des véhicules
+                vehicleList.innerHTML = '';
+
+                // Générer la liste des véhicules pour le mois sélectionné
+                const vehicleItems = generateVehicleList(selectedMonth, selectedYear);
+
+                // Ajouter la liste des véhicules à la page
+                vehicleItems.forEach(item => {
+                    vehicleList.appendChild(item);
+                });
+
+                // Charger les affectations enregistrées depuis le stockage local
+                loadAssignments();
+            });
+
+            // Chargement initial des véhicules pour le mois actuel
+            const currentMonth = new Date().getMonth() + 1; // Mois actuel
+            const currentYear = new Date().getFullYear(); // Année actuelle
+            const vehicleItems = generateVehicleList(currentMonth, currentYear);
+            vehicleItems.forEach(item => {
+                vehicleList.appendChild(item);
+            });
+
+            // Charger les affectations enregistrées depuis le stockage local
+            loadAssignments();
+        });
+    </script>
+</body>
+
+</html>

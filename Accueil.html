@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poullain SEPI</title>
+    <link rel="stylesheet" href="Accueil.css">
+    <style>
+        body {
+            /* Ajout de l'image de fond */
+            background-image: url('LOGO.jpg');
+            background-size: 50%; /* Redimensionne l'image pour couvrir toute la surface */
+            background-repeat: repeat-x; /* Évite la répétition de l'image */
+            background-position: center bottom -10; /* Centre l'image horizontalement et verticalement */
+        }
+
+        nav {
+            background-color: #001f3f; /* Bleu foncé */
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff; /* Blanc */
+            text-decoration: none;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffcc00; /* Jaune */
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background-color: #001f3f; /* Bleu foncé */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Poullain SEPI</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li class="dropdown">
+                <a href="CHANTIER.html">Chantiers</a>
+                <div class="dropdown-content">
+                    <a href="#">Chargé d'Affaires 1</a>
+                    <a href="#">Chargé d'Affaires 2</a>
+                    <a href="#">Chargé d'Affaires 3</a>
+                    <a href="#">Chargé d'Affaires 4</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="DEPANNAGE.html">Dépannages</a>
+                <div class="dropdown-content">
+                    <a href="#">Dépanneur 1</a>
+                    <a href="#">Dépanneur 2</a>
+                    <a href="#">Dépanneur 3</a>
+                </div>
+            </li>
+            <li><a href="VHL.html">Véhicules</a></li>
+        </ul>
+    </nav>
+
+    <footer>
+        <p>&copy; 2024 Poullain SEPI. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

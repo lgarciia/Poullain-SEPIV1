@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poullain SEPI - Ajout de Lieux d'Affectation</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #001f3f; /* Bleu foncé */
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+        }
+
+        nav {
+            background-color: #001f3f; /* Bleu foncé */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        .title {
+            margin: 0;
+            color: #fff;
+            font-size: 1.5em;
+        }
+
+        .back-button {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: color 0.3s, transform 0.3s;
+            margin-left: 0px; /* Décale le bouton vers la gauche */
+        }
+
+        .back-button:hover {
+            color: #99bbcc;
+            transform: translateY(-1px);
+        }
+
+        .form-container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            margin: 20px;
+            width: 300px; /* Réduction de la largeur du formulaire */
+            margin-left: auto;
+            margin-right: auto; /* Centre LE FORMULAIRE horizontalement */
+        }
+
+        .form-container input, .form-container button, .form-container label {
+            padding: 5px;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .form-container button {
+            background-color: #001f3f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #003366;
+            transform: translateY(-1px);
+        }
+
+        table {
+            width: 40%; /* Réduction de la largeur du tableau */
+            max-width: 800px;
+            border-collapse: collapse;
+            margin: 20px 0;
+            margin-left: auto;
+            margin-right: auto; /* Centre le tableau horizontalement */
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+
+        th {
+            background-color: #001f3f;
+            color: white;
+        }
+
+        footer {
+            background-color: #001f3f; /* Bleu foncé */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <h1 class="title">Ajouter un Lieu d'Affectation</h1>
+            <a href="LOYER.HTML" class="back-button">Retour</a>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <form id="affectationForm">
+            <input type="text" id="affectationName" placeholder="Nom du lieu d'affectation" required>
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
+
+    <table id="affectationTable">
+        <thead>
+            <tr>
+                <th>Lieu d'Affectation</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les nouvelles lignes seront ajoutées ici -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const affectationForm = document.getElementById('affectationForm');
+            const affectationTableBody = document.getElementById('affectationTable').getElementsByTagName('tbody')[0];
+
+            // Load saved affectations from localStorage
+            const savedAffectations = JSON.parse(localStorage.getItem('affectations')) || [];
+            savedAffectations.forEach(affectation => addAffectationToTable(affectation));
+
+            affectationForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const affectationName = document.getElementById('affectationName').value;
+
+                const affectation = {
+                    name: affectationName
+                };
+
+                // Add the affectation to the table
+                addAffectationToTable(affectation);
+
+                // Save the affectation to localStorage
+                savedAffectations.push(affectation);
+                localStorage.setItem('affectations', JSON.stringify(savedAffectations));
+
+                // Reset the form
+                affectationForm.reset();
+            });
+
+            function addAffectationToTable(affectation) {
+                const newRow = affectationTableBody.insertRow();
+                
+                const nameCell = newRow.insertCell(0);
+                const actionCell = newRow.insertCell(1);
+                
+                nameCell.textContent = affectation.name;
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Supprimer';
+                deleteButton.onclick = function() {
+                    const rowIndex = newRow.rowIndex - 1;
+                    savedAffectations.splice(rowIndex, 1);
+                    localStorage.setItem('affectations', JSON.stringify(savedAffectations));
+                    affectationTableBody.deleteRow(rowIndex);
+                };
+                actionCell.appendChild(deleteButton);
+            }
+        });
+    </script>
+</body>
+
+</html>
